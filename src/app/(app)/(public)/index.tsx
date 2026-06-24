@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 12,
-
     alignItems: 'center',
   },
   otherButtonText: {

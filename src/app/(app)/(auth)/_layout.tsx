@@ -2,7 +2,7 @@ import { Stack } from 'expo-router';
 
 const Layout = () => (
     <Stack>
-        <Stack.Screen name='index' options={{ title: 'Feed' }} />
+        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
     </Stack>
 );
 
