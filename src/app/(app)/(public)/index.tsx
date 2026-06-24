@@ -1,60 +1,22 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { Image, Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Link } from 'expo-router';
+import { Image, Linking, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import AppleAuthButton from "../../../../components/auth/AppleAuthButton";
 import GoogleAuthButton from "../../../../components/auth/GoogleAuthButton";
-import SmoothInfiniteScroll from "./SmoothInfiniteScroll";
+import SmoothInfiniteScroll from "../../../../components/auth/SmoothInfiniteScroll";
+
+const AnimationContainer = ({ index, style, children }: { index: number; style?: ViewStyle; children: React.ReactNode }) => (
+  <Animated.View entering={FadeInDown.delay(index * 100)} style={style}>
+    {children}
+  </Animated.View>
+);
 
 export default function Index() {
 
   const openWebBrowser = () => {
     Linking.openURL('https://galaxies.dev')
   };
-
-  const AppleButton = () => {
-
-    return (
-      <Animated.View entering={FadeInDown.delay(100)}>
-        <AppleAuthButton />
-      </Animated.View>
-    )
-  }
-
-  const GoogleButton = () => {
-    return (
-      <Animated.View entering={FadeInDown.delay(200)}>
-        <GoogleAuthButton />
-      </Animated.View>
-    )
-  }
-
-  const OtherOptions = () => {
-    return (
-      <Animated.View entering={FadeInDown.delay(300)}>
-        <TouchableOpacity style={styles.otherButton} >
-          <Text style={styles.otherButtonText}>
-            Other options
-          </Text>
-        </TouchableOpacity>
-      </Animated.View>
-    )
-  }
-
-  const PrivacyButton = () => {
-    return (
-      <Animated.View entering={FadeInDown.delay(400)} style={styles.privacyContainer}>
-        <Text style={styles.privacytext} >
-          Please visit{' '}
-          <Text style={styles.privacyLink} onPress={openWebBrowser}>
-            Wolt privacy Statement
-          </Text>
-          <Text>
-            {' '}to learn more about how Wolt collects, uses, shares and protects your personal data.
-          </Text>
-        </Text>
-      </Animated.View>
-    )
-  }
 
   return (
     <View style={styles.container}>
@@ -75,29 +37,41 @@ export default function Index() {
           style={{ position: 'absolute', height: 200, left: 0, bottom: 0, right: 0 }} />
       </View>
 
-
-
       <View style={styles.contentContainer}>
         <Image source={require('@/assets/images/wolt-logo.png')} style={styles.brandLogo} />
         <Animated.Text entering={FadeInDown} style={styles.tagline}>
           Almost everything delivered.
         </Animated.Text>
 
-        {/* {login buttons} */}
-        <View style={styles.buttonContainer} >
-          {/* apple auth button */}
-          <AppleButton />
+        <View style={styles.buttonContainer}>
+          <AnimationContainer index={1}>
+            <AppleAuthButton />
+          </AnimationContainer>
 
-          {/* google auth button */}
-          <GoogleButton />
+          <AnimationContainer index={2}>
+            <GoogleAuthButton />
+          </AnimationContainer>
 
-          {/* Action Buttons */}
-          <OtherOptions />
-
-
+          <AnimationContainer index={3}>
+            <Link href={'/(app)/(public)/otherOptions'} asChild>
+              <TouchableOpacity style={styles.otherButton}>
+                <Text style={styles.otherButtonText}>Other options</Text>
+              </TouchableOpacity>
+            </Link>
+          </AnimationContainer>
         </View>
-        {/* Privacy container */}
-        <PrivacyButton />
+
+        <AnimationContainer index={4} style={styles.privacyContainer}>
+          <Text style={styles.privacytext}>
+            Please visit{' '}
+            <Text style={styles.privacyLink} onPress={openWebBrowser}>
+              Wolt privacy Statement
+            </Text>
+            <Text>
+              {' '}to learn more about how Wolt collects, uses, shares and protects your personal data.
+            </Text>
+          </Text>
+        </AnimationContainer>
       </View>
     </View>
   );
@@ -138,7 +112,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 12,
-
     alignItems: 'center',
   },
   otherButtonText: {
